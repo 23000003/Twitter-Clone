@@ -1,0 +1,44 @@
+@import 'font.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.nav-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.308); 
+  transform: translateX(-50%);
+  transform-origin: center;
+  transition: width 0.3s ease;
+}
+
+.nav-item:hover::after {
+  width: 100%;
+}
+
+.custom-width{
+  width: 600px;
+}
+
+.profile-width{
+  width: 136px;
+  height: 136px;
+}
+
+.notif-height{
+  height: 107px;
+}
+
+.notif-top{
+  margin-top: 107px;
+}
