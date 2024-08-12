@@ -6,7 +6,7 @@ export function InitSocket(server) {
     
     io = new Server(server, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: process.env.PRODUCTION_URL  ,
             methods: ["GET", "POST"],
         }
     });

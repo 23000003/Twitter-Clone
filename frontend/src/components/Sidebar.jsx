@@ -1,22 +1,23 @@
-import { Outlet, Navigate, useLocation } from "react-router-dom";
+import { Outlet, Navigate, useLocation, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import XLogo from '../assets/XLogo.png'
 import IconNav from "./IconNav";
 import defaultPfp from '../assets/default.png'
 import WhoToFollow from "./WhoToFollow";
+import MessageBar from "./MessageBar";
 
 export default function Sidebar(){
 
     const { user } = useContext(UserContext);
     const location = useLocation();
-    console.log(user)
+    const { userID } = useParams();
     
     return(
         <>
         {!user.username ? (<Navigate to = "/" />): (
             <>
-            <div className="flex flex-row w-full min-h-dvh justify-center">
+            <div className="flex flex-row w-full min-h-dvh justify-center" >
                 <header className="flex flex-col items-end w-64">
                     <div className="fixed h-full w-72 ">
                         <div className="h-full p-5">
@@ -34,24 +35,28 @@ export default function Sidebar(){
                         </div>
                     </div>
                 </header>
-                <main className="custom-width w-full">
+                <main className={location.pathname !== '/messages' && location.pathname !== `/messages/${userID}` ? "custom-width w-full": "message-width w-full"}>
                     <Outlet/>
                 </main>
-                <div className="max-w-96 w-full ml-5">
-                    {location.pathname !== '/explore' && (
-                        <div className="ml-8 mt-2 mb-14 w-full relative z-10">
-                            <div className="fixed max-w-sm h-10 w-full">
-                                <form className="rounded-3xl w-full bg-gray-300 h-full p-2">
-                                    <div className="w-full ml-3">
-                                        <i className="fa-regular fa-comment"></i>
-                                        <input type="text" name="" id="" placeholder="Search" className="ml-3 text-md w-10/12"/>
-                                    </div>
-                                </form>
+                {location.pathname !== '/messages' && location.pathname !== `/messages/${userID}`? (
+                    <div className="max-w-96 w-full ml-5">
+                        {location.pathname !== '/explore' && (
+                            <div className="ml-8 mt-2 mb-14 w-full relative z-10">
+                                <div className="fixed max-w-sm h-10 w-full">
+                                    <form className="rounded-3xl w-full bg-gray-300 h-full p-2">
+                                        <div className="w-full ml-3">
+                                            <i className="fa-regular fa-comment"></i>
+                                            <input type="text" name="" id="" placeholder="Search" className="ml-3 text-md w-10/12"/>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    <WhoToFollow/>
-                </div>
+                        )}
+                        <WhoToFollow/>
+                    </div>
+                ) : (
+                    <MessageBar/>
+                )}
             </div>
             </>
         )}

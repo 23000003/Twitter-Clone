@@ -227,8 +227,60 @@ const UnLikePost = async(req, res) =>{
 
 }
 
+const RepostAPost = async (req, res) =>{
+
+    const { _id } = req.body;
+
+    try{
+
+        const userID = req.user._id;
+
+        const findPost = await Post.findById(_id);
+
+        findPost.reposted_by.push(userID);
+
+        await findPost.save();
+
+        io.emit('postReposted', { data: findPost });
+
+        return res.status(200).json({data: findPost});
+    
+    }catch(err){
+
+        return res.status(500).json({error: err.message});
+    
+    }
+
+}
+
+const UndoRepostAPost = async (req, res) =>{
+    
+    const { _id } = req.body;
+
+    try{
+
+        const userID = req.user._id;
+
+        const findPost = await Post.findById(_id);
+
+        findPost.reposted_by = findPost.reposted_by.filter(id => id.toString() !== userID.toString());
+
+        await findPost.save();
+
+        io.emit('postUndoRepost', { data: findPost });
+
+        return res.status(200).json({data: findPost});
+
+    }catch(err){
+
+        return res.status(500).json({error: err.message});
+
+    }
+
+}
+
 export { 
     CreateNewPost, DeletePost, FetchAllPost, 
     FetchViewedPost, FetchUserPagePost, FetchUserPostLiked,
-    LikePost, UnLikePost 
+    LikePost, UnLikePost, UndoRepostAPost, RepostAPost 
 };

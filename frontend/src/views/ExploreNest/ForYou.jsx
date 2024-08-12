@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { AppleAPI } from './hooks/NewsAPI';
+import { AppleAPI } from '../../components/hooks/NewsAPI';
 
-export default function Articles() {
+export default function ForYou() {
     
     useEffect(() =>{
 

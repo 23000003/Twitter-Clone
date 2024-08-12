@@ -18,7 +18,7 @@ const PostProvider = ({ children }) => {
         console.log("CHECK")
       }, 1000);
 
-    const handleSocketEvent = ({ data }) => { // unlike and like 
+    const handleLikeEvent = ({ data }) => { // unlike and like 
       setPost((prevPosts) =>
         prevPosts.map(post =>
           post._id === data._id ? { ...post, likes: data.likes } : post
@@ -27,12 +27,25 @@ const PostProvider = ({ children }) => {
       console.log(data);
     };
 
-    socket.on('postLiked', handleSocketEvent);
-    socket.on('postUnliked', handleSocketEvent);
+    const handleRepostEvent = ({ data }) => { // repost and unrepost
+      setPost((prevPosts) =>
+        prevPosts.map(post =>
+          post._id === data._id ? { ...post, reposted_by: data.reposted_by } : post
+        )
+      );
+      console.log(data);
+    };
+
+    socket.on('postLiked', handleLikeEvent);
+    socket.on('postUnliked', handleLikeEvent);
+    socket.on('postReposted', handleRepostEvent);
+    socket.on('postUndoRepost', handleRepostEvent);
 
     return () => {
-      socket.off('postLiked', handleSocketEvent);
-      socket.off('postUnliked', handleSocketEvent);
+      socket.off('postLiked', handleLikeEvent);
+      socket.off('postUnliked', handleLikeEvent);
+      socket.off('postReposted', handleRepostEvent);
+      socket.off('postUndoRepost', handleRepostEvent);
     };
 
   }, []);

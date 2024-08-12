@@ -13,6 +13,14 @@ export default function SocketListener(io){
             io.emit('postUnliked', { data });
         });
 
+        socket.on('postReposted', ({ data }) => {
+            io.emit('postReposted', { data });
+        });
+
+        socket.on('postUndoRepost', ({ data }) => {
+            io.emit('postUndoRepost', { data });
+        });
+
         socket.on('disconnect', () => {
             console.log('User disconnected:', socket.id);
         });

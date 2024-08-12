@@ -12,6 +12,8 @@ import Profile from "./views/ViewUserNest/Profile";
 import Comments from "./views/ViewUserNest/Comments";
 import Likes from "./views/ViewUserNest/Likes";
 import Message from "./views/Message";
+import Bookmarks from "./views/Bookmarks";
+import NoFeatures from "./views/NoFeatures";
 
 function Router(){
     return (
@@ -46,8 +48,17 @@ function Router(){
                     <Route index element={<Connect/>} />
                 </Route>
 
-                <Route path="/message" element={<Sidebar/>}>
+                <Route path="/messages" element={<Sidebar/>}>
                     <Route index element={<Message />} />
+                    <Route path=":userID" element={<Message />} />
+                </Route>
+
+                <Route path="/bookmarks" element={<Sidebar/>}>
+                    <Route index element={<Bookmarks />} />
+                </Route>
+
+                <Route path="/:feature" element={<Sidebar/>}>
+                    <Route index element={< NoFeatures/>} />
                 </Route>
 
             </Routes>

@@ -30,6 +30,10 @@
   width: 600px;
 }
 
+.message-width{
+  max-width: 420px;
+}
+
 .profile-width{
   width: 136px;
   height: 136px;
@@ -41,4 +45,12 @@
 
 .notif-top{
   margin-top: 107px;
+}
+
+.message-height{
+  height: 5%;
+}
+
+.message-height1{
+  height: 95%;
 }

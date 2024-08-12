@@ -28,7 +28,7 @@ export async function useCommentPost(content, file, username, postID){
         return data.newComment;
 
     } catch (err) {
-        throw new Error(err);
+        throw new Error(err.response.data.error);
     }
 
 }
@@ -48,6 +48,6 @@ export async function getUserCommentOnPost(username){
         return userComments;
     }
     catch(err){
-        throw new Error(err)
+        throw new Error(err.response.data.error)
     }
 }

@@ -78,7 +78,7 @@ export async function useWhoToFollow(){
         });
         return data;
     }catch(err){
-        throw new Error(err)
+        throw new Error(err.response.data.error)
     }
 }
 
@@ -89,7 +89,7 @@ export async function useFetchUser(username){
         return data
         
     }catch(err){
-        throw new Error(err);
+        throw new Error(err.response.data.error);
     }
 }
 // import axios from 'axios';

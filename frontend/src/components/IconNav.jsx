@@ -52,7 +52,7 @@ export default function IconNav(){
             </svg>
             <span className="text-xl font-normal ml-4">Notifications</span>
         </Link>
-        <Link className="w-full h-16 flex flex-row items-center font-twitterChirp nav-item">
+        <Link className="w-full h-16 flex flex-row items-center font-twitterChirp nav-item" to="/messages">
             <svg viewBox="0 0 24 24" aria-hidden="true" className="w-7">
                 <g>
                     <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 
@@ -88,7 +88,7 @@ export default function IconNav(){
             </svg>
             <span className="text-xl font-normal ml-4">Lists</span>
         </Link>
-        <Link className="w-full h-16 flex flex-row items-center font-twitterChirp nav-item">
+        <Link className="w-full h-16 flex flex-row items-center font-twitterChirp nav-item" to="/bookmarks">
             <svg viewBox="0 0 24 24" aria-hidden="true" className="w-7">
                 <g>
                     <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5zM6.5 

@@ -1,5 +1,4 @@
-import React from 'react'
-import Articles from '../components/Articles'
+import ForYou from './ExploreNest/ForYou'
 
 export default function Explore() {
     return (
@@ -26,7 +25,7 @@ export default function Explore() {
 
         <div className='border-b notif-top border-x'>
             
-            <Articles/>
+            <ForYou />
             
             <div className="h-svh w-full flex">
                 <span></span>

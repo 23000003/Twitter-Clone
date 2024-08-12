@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import { PostContext } from '../contexts/PostContext';
 import { ConvertDate } from '../scripts/TimeConverter';
 import { UserContext } from '../contexts/UserContext';
-import { TriggerLikeByYou, TriggerUnLikeByYou } from './hooks/PostHook';
+import { TriggerLikeByYou, TriggerRepostByYou, TriggerUndoRepostByYou, TriggerUnLikeByYou } from './hooks/PostHook';
 
 export default function AllPosts(){
 
@@ -42,10 +42,17 @@ export default function AllPosts(){
                                             <i className="fa-regular fa-comment text-gray-500"></i>
                                             <span className='text-sm ml-2 text-gray-400'>{post.comments.length}</span>
                                         </span>
-                                        <span>
-                                            <i className="fa-solid fa-retweet text-gray-500"></i>
-                                            <span className='text-sm ml-2 text-gray-400'>{post.reposted_by.length}</span>
-                                        </span>
+                                        {post.reposted_by.includes(user._id) ? (
+                                            <span onClick={(e) => {e.stopPropagation(); TriggerUndoRepostByYou(post._id);}}>
+                                                <i className="fa-solid fa-retweet text-green-500"></i>
+                                                <span className='text-sm ml-2 text-green-500'>{post.reposted_by.length}</span>
+                                            </span>
+                                        ) : (
+                                            <span onClick={(e) => {e.stopPropagation(); TriggerRepostByYou(post._id);}}>
+                                                <i className="fa-solid fa-retweet text-gray-500"></i>
+                                                <span className='text-sm ml-2 text-gray-400'>{post.reposted_by.length}</span>
+                                            </span>
+                                        )}
                                         {post.likes.includes(user._id) ? (
                                             <span onClick={(e) => {e.stopPropagation(); TriggerUnLikeByYou(post._id);}}  className='hover:bg-gray-500'>
                                                 <i className="fa-solid fa-heart text-red-500"></i>

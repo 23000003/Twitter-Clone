@@ -28,17 +28,20 @@ export async function NewPost(content, file) {
 
         return data;
     } catch (err) {
-        throw new Error(err);
+        throw new Error(err.response.data.error);
     }
 }
 
 export async function getAllPosts() {
+    
     try{
+
         const data = await axios.get('/api/post');
         console.log(data);
         return data;
+
     }catch(err){
-        throw new Error(err)
+        throw new Error(err.response.data.error)
     }
 }
 
@@ -60,7 +63,7 @@ export async function getViewedPost(postID, username){
     }
     catch(err){
 
-        throw new Error(err)
+        throw new Error(err.response.data.error)
     }
 }
 
@@ -80,7 +83,7 @@ export async function getUserPostData(username){
     }
     catch(err){
 
-        throw new Error(err)
+        throw new Error(err.response.data.error)
     }
 }
 
@@ -100,7 +103,7 @@ export async function getUserPostLiked(username){
     }
     catch(err){
 
-        throw new Error(err)
+        throw new Error(err.response.data.error)
     }
 
 }
@@ -118,7 +121,7 @@ export async function patchLikeByYou(_id){
         return res.data;
     }catch(err){
 
-        throw new Error(err.message)
+        throw new Error(err.response.data.error)
     }
 
 }
@@ -135,7 +138,37 @@ export async function patchUnlikeByYou(_id){
         return res.data;
     }catch(err){
 
-        throw new Error(err.message)
+        throw new Error(err.response.data.error)
     }
 
+}
+
+export async function patchRepostByYou(_id){
+
+    try{ 
+        const res = await axios.patch(`/api/post/repost`, { _id }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+
+        return res.data;
+    }catch(err){
+        throw new Error(err.response.data.error);   
+    }
+}
+
+export async function patchUndoRepostByYou(_id){
+
+    try{ 
+        const res = await axios.patch(`/api/post/undoRepost`, { _id }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+
+        return res.data;
+    }catch(err){
+        throw new Error(err.response.data.error);   
+    }
 }

@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api' : {
-        target: import.meta.env.VITE_PRODUCTION_KEY,
+        target: "http://localhost:4000",
         changeOrigin: true,
       }
     }
