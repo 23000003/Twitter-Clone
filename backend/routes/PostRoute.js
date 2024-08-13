@@ -8,7 +8,8 @@ import {
     LikePost, 
     RepostAPost, 
     UndoRepostAPost, 
-    UnLikePost
+    UnLikePost,
+    FetchUserFollowing
 } from "../controller/PostController.js";
 import auth from "../middleware/authMiddleware.js";
 
@@ -16,6 +17,8 @@ const router = express.Router();
 
 router.post('/', auth, CreateNewPost);
 router.get('/', FetchAllPost);
+
+router.post('/following', auth, FetchUserFollowing);
 
 router.patch('/like', auth, LikePost);
 router.patch('/unlike', auth, UnLikePost);

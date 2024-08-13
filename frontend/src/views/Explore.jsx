@@ -30,6 +30,10 @@ export default function Explore() {
             <div className="h-svh w-full flex">
                 <span></span>
             </div>
+
+            <h2 id="question">
+                //TEXT CONTENT
+            </h2>
         </div>
         </>
     )

@@ -2,6 +2,7 @@ import { useState, useContext, useRef } from 'react';
 import guest from "../assets/default.png";
 import { NewPost } from '../controller/PostController';
 import { PostContext } from '../contexts/PostContext';
+import { UserContext } from '../contexts/UserContext';
 
 export default function PostInputTextarea() {
     const [textareaRows, setTextareaRows] = useState(1);
@@ -9,6 +10,7 @@ export default function PostInputTextarea() {
     const [newPost, setNewPost] = useState('');
     const [newFile, setNewFile] = useState(' '); //default value for the db if theres no image from the post
     const { post, setPost, loading } = useContext(PostContext);
+    const { user } = useContext(UserContext);
     const textareaRef = useRef(null);
 
     // Function to handle textarea changes
@@ -42,7 +44,7 @@ export default function PostInputTextarea() {
         }
     }
 
-    console.log(newFile)
+    console.log(post)
 
     const autoResizeTextarea = (textarea) => {
         textarea.style.height = 'auto'; 
@@ -68,7 +70,7 @@ export default function PostInputTextarea() {
             <div className="flex flex-col px-5 pt-5">
                 <div className="flex flex-row items-start">
                     <div className="flex flex-row items-start w-full" >
-                        <img src={guest} className="w-9 rounded-2xl" alt="Guest" />
+                        <img src={user.profile} className="w-9 rounded-3xl" alt="Guest" />
                         <textarea
                             ref={textareaRef}
                             rows={textareaRows}

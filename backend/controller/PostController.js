@@ -31,7 +31,7 @@ const CreateNewPost = async (req, res) =>{
         const posts = await Post.find(newPost._id)
             .populate({
                 path: 'author',
-                select: 'username profile_pic'
+                select: 'username profile_pic followers'
             })
         
         
@@ -51,7 +51,7 @@ const FetchAllPost = async (req, res) =>{
             .sort({ date_created: "desc" })
             .populate({
                 path: 'author',
-                select: 'username profile_pic'
+                select: 'username profile_pic followers'
             })
             .populate({
                 path: 'comments',
@@ -279,8 +279,48 @@ const UndoRepostAPost = async (req, res) =>{
 
 }
 
+const FetchUserFollowing = async(req, res) =>{
+
+    const { _id } = req.body;
+
+    try{
+
+        const user = await User.findById(_id);
+
+        if(!user){
+            return res.status(404).json({error: "User not found"});
+        }
+
+        const following = user.following.map(follow => follow.toString());
+
+        //include urself :))
+        following.push(user._id.toString());
+
+        const filteredPosts = await Post.find({ author: { $in: following } })
+        .sort({ date_created: "desc" })
+            .populate({
+                path: 'author',
+                select: 'username profile_pic'
+            })
+            .populate({
+                path: 'comments',
+                options: { sort: { date_commented: -1 } },
+                select: 'content date_commented likes',
+                populate: {
+                    path: 'author',
+                    select: '_id',
+                }
+            });
+
+        return res.status(200).json({data: filteredPosts});
+    }catch(err){
+        return res.status(500).json({error: err.message});
+    }
+
+}
+
 export { 
     CreateNewPost, DeletePost, FetchAllPost, 
     FetchViewedPost, FetchUserPagePost, FetchUserPostLiked,
-    LikePost, UnLikePost, UndoRepostAPost, RepostAPost 
+    LikePost, UnLikePost, UndoRepostAPost, RepostAPost, FetchUserFollowing 
 };

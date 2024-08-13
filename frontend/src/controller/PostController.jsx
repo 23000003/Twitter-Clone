@@ -172,3 +172,19 @@ export async function patchUndoRepostByYou(_id){
         throw new Error(err.response.data.error);   
     }
 }
+
+export async function getUsersFollowingPosts(_id){
+
+    try{
+        const res = await axios.post(`/api/post/following`, { _id } , {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+        
+        return res.data;
+    }catch(err){
+        throw new Error(err.response.data.error);
+    }
+
+}

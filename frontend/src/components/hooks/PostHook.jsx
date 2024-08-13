@@ -1,4 +1,9 @@
-import { patchLikeByYou, patchRepostByYou, patchUndoRepostByYou, patchUnlikeByYou } from '../../controller/PostController';
+import { 
+    patchLikeByYou, 
+    patchRepostByYou, 
+    patchUndoRepostByYou, 
+    patchUnlikeByYou 
+} from '../../controller/PostController';
 
 
 export async function TriggerLikeByYou(_id){

@@ -1,22 +1,43 @@
-import guest from '../assets/default.png'
-import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import { PostContext } from '../contexts/PostContext';
-import { ConvertDate } from '../scripts/TimeConverter';
-import { UserContext } from '../contexts/UserContext';
-import { TriggerLikeByYou, TriggerRepostByYou, TriggerUndoRepostByYou, TriggerUnLikeByYou } from './hooks/PostHook';
+import { useContext, useEffect, useState } from "react"
+import { UserContext } from "../contexts/UserContext";
+import { getUsersFollowingPosts } from "../controller/PostController";
+import { ConvertDate } from "../scripts/TimeConverter";
+import { useNavigate } from "react-router-dom";
+import { PostContext } from "../contexts/PostContext";
 
-export default function AllPosts(){
+export default function FollowingPost() {
 
-    const { post, loading } = useContext(PostContext);
+    const [followingPost, setFollowingPost] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const { post, setPost } = useContext(PostContext);
     const { user } = useContext(UserContext);
 
-    const [viewContentImage, setViewContentImage] = useState(false);
-    const [clickTest, setClickTest] = useState(false);
-    const navigate = useNavigate()
-    console.log(post)
+    useEffect(() =>{
+        console.log(post);
+        console.log(user._id);
 
-    return(
+        if(post !== undefined ){
+            setTimeout( async () => {
+                try{
+                    // const data = await getUsersFollowingPosts(user._id);
+                    console.log(user);
+                    console.log(post.author)
+                    const temp = post.filter(post => post.author.followers.includes(user._id) || post.author._id.toString() === user._id.toString());
+                    setFollowingPost(temp);
+                    setLoading(false);
+                }catch(err){
+                    console.log(err);
+                }
+    
+            }, 1000)
+        }
+        
+    },[post])
+
+    console.log(followingPost);
+
+    return (
         <>
         {!loading ? (
             post ? (
@@ -28,20 +49,9 @@ export default function AllPosts(){
                                     <img src={post.author.profile_pic} className="w-9 rounded-2xl" alt="Guest" />
                                 </span>
                                 <div className='flex flex-col w-full'>
-                                    <div className='flex flex-row ml-4 justify-between'>
-                                        <div className='flex flex-row'>
-                                            <span className='font-semibold'>{post.author.username}</span>
-                                            <span className='ml-2 text-gray-400'>@ {post.author.username} • {ConvertDate(post.date_created)}</span>
-                                        </div>
-                                        <div className="cursor-pointer">
-                                            <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 mr-3">
-                                                <g>
-                                                    <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 
-                                                        .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z">
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                        </div>
+                                    <div className='flex flex-row ml-4'>
+                                        <span className='font-semibold'>{post.author.username}</span>
+                                        <span className='ml-2 text-gray-400'>@ {post.author.username} • {ConvertDate(post.date_created)}</span>
                                     </div>
                                     <div className='ml-4'>
                                         <span>{post.content}</span>
@@ -91,5 +101,5 @@ export default function AllPosts(){
             <span>Loading...</span>
         )}
         </>
-    );
+    )
 }
