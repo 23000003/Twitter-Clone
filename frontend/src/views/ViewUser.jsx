@@ -61,7 +61,7 @@ export default function ViewUser(){
                                     <span className="font-twitterChirp text-base text-gray-400">@{viewUser.username}</span>
                                     <span className="mt-3">{viewUser.bio}</span>
                                     <div className="mt-3 font-twitterChirp">
-                                        <span className="font-bold text-gray-600">
+                                        <span className="font-bold text-gray-600" onClick={() => navigate('following')}>
                                             {viewUser.following.length} 
                                             <span className="font-medium text-gray-500">Following</span>
                                         </span>
