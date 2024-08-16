@@ -14,6 +14,7 @@ import Likes from "./views/ViewUserNest/Likes";
 import Message from "./views/Message";
 import Bookmarks from "./views/Bookmarks";
 import NoFeatures from "./views/NoFeatures";
+import Followers from "./views/ViewUserNest/Followers";
 
 function Router(){
     return (
@@ -33,6 +34,7 @@ function Router(){
                         <Route path="with_comments" element={<Comments />} />
                         <Route path="likes" element={<Likes />} />
                     </Route>
+                    <Route path="followers" element={<Followers />}></Route>
                     <Route path="status/:postID" element={<ViewPost/>}/>
                 </Route>
 

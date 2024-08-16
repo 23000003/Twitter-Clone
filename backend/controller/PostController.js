@@ -113,7 +113,16 @@ const FetchUserPagePost = async(req, res) =>{
     try{
         const username = req.params.username;
 
-        const user = await User.findOne({ username: username });
+        const user = await User.findOne({ username: username })
+        .populate({
+            path: 'following',
+            select: 'username profile_pic bio'
+        })
+        .populate({
+            path: 'followers',
+            select: 'username profile_pic bio'
+        });
+
 
         if (!user) {
             return res.status(404).json({ message: "User doesnt Exists" });
@@ -173,11 +182,6 @@ const FetchUserPostLiked = async(req, res) =>{
 
 }
 
-const DeletePost = async(req, res) =>{
-
-    res.send(401).json({error: "HEY"})
-
-}
 
 const LikePost = async(req, res) =>{
 
@@ -319,8 +323,30 @@ const FetchUserFollowing = async(req, res) =>{
 
 }
 
+const DeleteYourPost = async (req, res) =>{
+
+    const { _id } = req.body;
+
+    try{
+
+        const findPost = await Post.findById(_id);
+
+        if(!findPost){
+            return res.status(404).json({error: "Post Not Found"});
+        }
+
+        await findPost.deleteOne();
+
+        res.status(200).json({success: "Post Deleted Successful"})
+
+    }catch(err){
+        return res.status(500).json({error: err.message});
+    }
+
+}
+
 export { 
-    CreateNewPost, DeletePost, FetchAllPost, 
-    FetchViewedPost, FetchUserPagePost, FetchUserPostLiked,
-    LikePost, UnLikePost, UndoRepostAPost, RepostAPost, FetchUserFollowing 
+    CreateNewPost, FetchAllPost, FetchViewedPost, FetchUserPagePost, 
+    FetchUserPostLiked, LikePost, UnLikePost, UndoRepostAPost, RepostAPost, 
+    FetchUserFollowing, DeleteYourPost 
 };

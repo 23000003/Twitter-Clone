@@ -8,7 +8,7 @@ export default function Notifications() {
         <div className="custom-width bg-white notif-height fixed border opacity-95 z-10">
             <div className="flex flex-row h-1/2 text-base font-twitterChirp items-center mx-5 justify-between">
                 <span className="font-bold text-xl">Notifications</span>
-                <i class="fa-solid fa-gear"></i>
+                <i className="fa-solid fa-gear"></i>
             </div>
             <div className='flex flex-row h-1/2 items-end justify-around'>
                 <div className='hover:bg-gray-200 cursor-pointer w-full flex justify-center py-3 transition duration-200'>

@@ -1,38 +1,24 @@
 import { Link, Outlet, useNavigate, useParams, useLocation } from "react-router-dom"
-import def from '../assets/default.png'
-import { getUserPostData } from "../controller/PostController";
-import { useEffect, useState, useContext } from "react";
-import { ConvertDate } from "../scripts/TimeConverter";
+import { useEffect, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import bgSample from "../assets/Sample-png-image-500kb.png"
 import { ProfileContext } from "../contexts/ProfileContext";
+import ViewUserHook from "./ViewUserNest/hook/ViewUserHook";
 
 export default function ViewUser(){
     
-    // const { viewUser } = location.state || {};
     const { username } = useParams();
-    const { viewUser, setViewUser, loading, setLoading, usersPost, setUsersPost } = useContext(ProfileContext);
+    const { viewUser, loading, usersPost} = useContext(ProfileContext);
     const { user } = useContext(UserContext); // to check if its your account that ur viewing
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(useLocation());
+    const ViewUserData = ViewUserHook();
+    console.log(useParams());
 
     useEffect(() =>{
-        setLoading(true);
-        setTimeout( async () =>{
-            try{
-                const data = await getUserPostData(username);
-                setLoading(false);
-                setUsersPost(data.posts)
-                setViewUser(data.user)
-                console.log(data,"DATA");
-            }catch(err){
-                console.log(err)
-            }
-        }, 1000);
+        ViewUserData();
+    }, [username]);
 
-    },[username]);
-    
     return(
         <>
         {!loading ? (
@@ -44,7 +30,7 @@ export default function ViewUser(){
                     </div>
                     <div className="flex flex-col">
                         <span className="font-bold text-xl">{viewUser.username}</span>
-                        <span className="text-sm text-gray-400 font-twitterChirp">1 post</span>
+                        <span className="text-sm text-gray-400 font-twitterChirp">{usersPost.length} post</span>
                     </div>
                 </div>
             </div>
@@ -75,8 +61,14 @@ export default function ViewUser(){
                                     <span className="font-twitterChirp text-base text-gray-400">@{viewUser.username}</span>
                                     <span className="mt-3">{viewUser.bio}</span>
                                     <div className="mt-3 font-twitterChirp">
-                                        <span className="font-bold text-gray-600">{viewUser.following.length} <span className="font-medium text-gray-500">Following</span></span>
-                                        <span className="ml-5 font-bold text-gray-600">{viewUser.followers.length} <span className="font-medium text-gray-500">Followers</span></span>
+                                        <span className="font-bold text-gray-600">
+                                            {viewUser.following.length} 
+                                            <span className="font-medium text-gray-500">Following</span>
+                                        </span>
+                                        <span className="ml-5 font-bold text-gray-600 cursor-pointer" onClick={() => navigate(`followers`)}>
+                                            {viewUser.followers.length}
+                                            <span className="font-medium text-gray-500">Followers</span>
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="mt-5 font-twitterChirp flex flex-row justify-around">

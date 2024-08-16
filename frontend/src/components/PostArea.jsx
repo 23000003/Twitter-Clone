@@ -104,7 +104,11 @@ export default function PostInputTextarea() {
                         </div>
                     </div>
                     <div className='mr-6'>
-                        <button type='submit' className='bg-blue-400 px-5 py-1.5 rounded-2xl text-sm text-white font-bold'>Post</button>
+                        {newPost == '' && newFile == ' ' ? (
+                            <button type='submit' className='bg-blue-200 px-5 py-1.5 rounded-2xl text-sm text-white font-bold' disabled>Post</button>
+                        ) : (
+                            <button type='submit' className='bg-blue-400 px-5 py-1.5 rounded-2xl text-sm text-white font-bold'>Post</button>
+                        )}
                     </div>
                 </div>
             </div>

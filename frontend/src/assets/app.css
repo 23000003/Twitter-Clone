@@ -54,3 +54,9 @@
 .message-height1{
   height: 95%;
 }
+
+.edit-custom{
+  margin-left: -250px;
+  margin-top: -20px;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}

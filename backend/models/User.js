@@ -25,6 +25,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         maxLength: 30,
     },
+    pinned:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+    },
     followers: [
         {
             type: mongoose.Schema.Types.ObjectId,

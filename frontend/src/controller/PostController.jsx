@@ -188,3 +188,21 @@ export async function getUsersFollowingPosts(_id){
     }
 
 }
+
+export async function deleteYourPost(_id){
+
+    try{
+
+        const res = await axios.post(`/api/post/deletePost`, { _id }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+
+        return res;
+
+    }catch(err){
+        throw new Error(err.response.data.error);
+    }
+
+}

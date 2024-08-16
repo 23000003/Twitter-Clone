@@ -11,6 +11,8 @@ export default function Profile() {
     const { user } = useContext(UserContext)
     const navigate = useNavigate();
 
+    console.log(viewUser);
+
     return (
         <>
         {usersPost.length > 0 ? (
