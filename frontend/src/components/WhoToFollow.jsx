@@ -1,14 +1,27 @@
-import { useContext, useEffect, useState, useMemo } from "react";
-import { useWhoToFollow } from "../controller/UserController";
+import { useContext, useEffect, useState, useMemo, useRef } from "react";
+import { useFollowUser, useUnfollowUser, useWhoToFollow } from "../controller/UserController";
 import { WhoToFollowContext } from "../contexts/WhoToFollowContext";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 
 export default function WhoToFollow() {
+
     const { whoToFollow, setWhoToFollow, relevantPeople, loading, setLoading } = useContext(WhoToFollowContext);
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const { username } = useParams();
+
+    const hoverIndexRef = useRef(null);
+
+    const handleMouseEnter = (index) => {
+        hoverIndexRef.current = index;
+    };
+
+    const handleMouseLeave = () => {
+        hoverIndexRef.current = null;
+    };
+
+    const [isFollowed, setIsFollowed] = useState([]);
 
     useEffect(() => {
         setLoading(true);
@@ -36,6 +49,37 @@ export default function WhoToFollow() {
     const shuffledWhoToFollow = useMemo(() => {
         return shuffle([...whoToFollow]);
     }, [whoToFollow]);
+
+
+    const FollowUser = async (_id) =>{
+
+        try{
+            const data = await useFollowUser(_id);
+            console.log(data);
+            setIsFollowed(data.data.following);
+        }catch(err){
+            console.log(err.message);
+        }
+
+    }
+
+    const UnfollowUser = async (_id) =>{
+
+        try{
+            const data = await useUnfollowUser(_id);
+            console.log(data);
+            setIsFollowed(data.data.following);
+        }catch(err){
+            console.log(err.message);
+        }
+
+    }
+
+    console.log(whoToFollow)
+
+    if(loading){
+        return <div>loading...</div>
+    } 
 
     return (
         <>
@@ -90,9 +134,20 @@ export default function WhoToFollow() {
                                             <span className="text-sm text-gray-400">@{user.username}</span>
                                         </div>
                                     </div>
-                                    <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700">
-                                        Follow
-                                    </button>
+                                    { isFollowed.includes(user._id) ? (
+                                        <button
+                                            className={`text-black border h-9 w-24 rounded-3xl font-medium mr-3 ${hoverIndexRef.current === index ? 'border-red-600 text-red-600' : 'bg-white'}`}
+                                            onMouseEnter={() => handleMouseEnter(index)}
+                                            onMouseLeave={handleMouseLeave}
+                                            onClick={(e) => {e.stopPropagation(); UnfollowUser(user._id)}} 
+                                        >
+                                            {hoverIndexRef.current === index ? 'Unfollow' : 'Following'}
+                                        </button>
+                                    ) : (
+                                        <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700" onClick={(e) => {e.stopPropagation(); FollowUser(user._id)}}>
+                                            Follow
+                                        </button>
+                                    )}
                                 </div>
                             ))
                         ) : (

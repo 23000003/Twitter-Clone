@@ -20,7 +20,8 @@ router.post('/', auth, CreateNewPost);
 router.get('/', FetchAllPost);
 
 router.post('/following', auth, FetchUserFollowing);
-router.post('/deletePost', auth, DeleteYourPost);
+
+router.delete('/deletePost/:id', auth, DeleteYourPost);
 
 router.patch('/like', auth, LikePost);
 router.patch('/unlike', auth, UnLikePost);

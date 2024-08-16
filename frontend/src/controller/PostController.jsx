@@ -193,7 +193,7 @@ export async function deleteYourPost(_id){
 
     try{
 
-        const res = await axios.post(`/api/post/deletePost`, { _id }, {
+        const res = await axios.delete(`/api/post/deletePost/${_id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             }

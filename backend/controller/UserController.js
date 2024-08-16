@@ -121,8 +121,56 @@ const FetchUser = async(req, res) =>{
 
 }
 
-export default FetchWhoToFollow;
+const FollowAUser = async(req, res) =>{
 
+  const { _id } = req.body;
 
+  try{
 
-export {LoginUser, RegisterUser, FetchWhoToFollow, FetchUser}
+    const FollowedUser = await User.findById(_id);
+
+    if(!FollowedUser){
+      return res.status(404).json({message: "User does not exist"});
+    }
+
+    const UpdateFollowing = await User.findById(req.user._id);
+
+    UpdateFollowing.following.push(_id);
+
+    await UpdateFollowing.save();
+
+    return res.status(200).json({data: UpdateFollowing});
+  }catch(err){
+    return res.status(500).json({error: err.message});
+  }
+
+}
+
+const UnFollowAUser = async(req, res) =>{
+
+  const { id } = req.params;
+
+  try{
+
+    const user = await User.findById(req.user._id); //ur account
+
+    if (!user.following.includes(id)) {
+      return res.status(404).json({ message: "Follower not found" });
+    }
+
+    user.following = user.following.filter(userid => userid.toString() !== id);
+
+    await user.save();
+
+    return res.status(200).json({data: user});
+
+  }catch(err){
+    return res.status(500).json({error: err.message});
+  }
+
+}
+
+export {
+  LoginUser, RegisterUser, FetchWhoToFollow, 
+  FetchUser, FollowAUser, UnFollowAUser
+}

@@ -19,7 +19,6 @@ const UserSchema = new mongoose.Schema({
     },
     background_pic: {
         type: String,
-        required: true,
     },
     bio: {
         type: String,

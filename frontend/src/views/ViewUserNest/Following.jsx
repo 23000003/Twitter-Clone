@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { ProfileContext } from "../../contexts/ProfileContext"
 import { useNavigate, useParams } from "react-router-dom";
 import ViewUserHook from "./hook/ViewUserHook";
@@ -11,6 +11,9 @@ export default function Following() {
     const navigate = useNavigate();
     const ViewUserData = ViewUserHook();
 
+    const [isCancelFollowing, setIsCancelFollowing] = useState([]);
+    const [isFollowed, setIsFollowed] = useState([]);
+
     useEffect(() =>{
         ViewUserData();
     },[username]);
@@ -22,6 +25,7 @@ export default function Following() {
         window.scrollTo({ top: 0 });
     },[]);
 
+    //This should be my account to check if its followed to the viewUsers followers/following
     return (
         <>
         <div className="custom-width bg-white notif-height fixed border opacity-95 z-10">

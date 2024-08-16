@@ -85,60 +85,44 @@ export async function useWhoToFollow(){
 export async function useFetchUser(username){
 
     try{
-        const data = axios.get(`/api/user/${username}`);
-        return data
+        const data = await axios.get(`/api/user/${username}`);
+        
+        return data;
         
     }catch(err){
         throw new Error(err.response.data.error);
     }
 }
-// import axios from 'axios';
 
-// export async function useLoginUser(username, password) {
-//     if (!username || !password) {
-//         throw new Error("All fields required");
-//     }
+export async function useFollowUser(_id){
 
-//     const res = await axios.post("/api/user/login", {
-//         username,
-//         password
-//     });
+    try{
 
-//     const data = res.data;
+        const data = await axios.patch(`/api/user/followUser`, { _id }, {
+            headers : {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        })
 
-    
-//     if (res.status !== 200) {
-//         throw new Error(data.error);
-//     }
+        return data.data;
+    }catch(err){
+        throw new Error(err.response.data.error)
+    }
 
-//     localStorage.setItem("token", data.token);
-//     localStorage.setItem("username", data.username);
+}
 
-//     return data;
-// }
+export async function useUnfollowUser(_id){
 
-// export async function useCreateUser(username, password, confirmPass) {
-//     if (!username || !password || !confirmPass) {
-//         throw new Error("All fields required");
-//     }
+    try{
 
-//     if (password !== confirmPass) {
-//         throw new Error("Passwords do not match");
-//     }
+        const data = await axios.delete(`/api/user/unfollowUser/${_id}`, {
+            headers : {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        });
 
-//     const res = await axios.post("/api/user/createAccount", {
-//         username,
-//         password
-//     });
-
-//     const data = res.data;
-
-//     if (res.status !== 200) {
-//         throw new Error(data.error);
-//     }
-
-//     localStorage.setItem("token", data.token);
-//     localStorage.setItem("username", data.username);
-
-//     return data;
-// }
+        return data.data;
+    }catch(err){
+        throw new Error(err.response.data.error);
+    }
+}

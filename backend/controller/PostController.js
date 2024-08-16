@@ -325,17 +325,15 @@ const FetchUserFollowing = async(req, res) =>{
 
 const DeleteYourPost = async (req, res) =>{
 
-    const { _id } = req.body;
+    const { id } = req.params;
 
     try{
 
-        const findPost = await Post.findById(_id);
+        const findPost = await Post.findByIdAndDelete(id);
 
         if(!findPost){
             return res.status(404).json({error: "Post Not Found"});
         }
-
-        await findPost.deleteOne();
 
         res.status(200).json({success: "Post Deleted Successful"})
 
