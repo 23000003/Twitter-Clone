@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { useFetchUser } from "../controller/UserController";
 
 export const UserContext = createContext();
 
@@ -11,10 +12,28 @@ const UserProvider = ({ children }) => {
     posts: [],
   });
 
-  console.log(user)
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() =>{
+
+    if(user.username){
+      const FetchUserData = async() =>{
+        try{
+          const data = await useFetchUser();
+          setUserData(data.data.data);
+        }catch(err){
+          console.log(err.message);
+        }
+      }
+      FetchUserData();
+    }
+
+  },[user]);
+
+  console.log(user);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, userData }}>
       {children}
     </UserContext.Provider>
   );

@@ -103,11 +103,20 @@ const FetchUser = async(req, res) =>{
 
   try{
 
-    const user = req.params.username;
+    const { id } = req.params;
 
-    console.log(user);
-
-    const data = await User.findOne({ username: user });
+    const data = await User.findById(id)
+    .populate({
+      path: 'following',
+      select: 'username profile_pic bio'
+    })
+    .populate({
+      path: 'followers',
+      select: 'username profile_pic bio'
+    })
+    .populate({
+      path: 'bookmarks'
+    })
 
     if(!data){
       return res.status(404).json({message: "User does not exist"})

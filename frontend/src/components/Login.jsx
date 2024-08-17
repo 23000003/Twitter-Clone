@@ -25,7 +25,7 @@ export default function LoginUser({setLogin}){
             setUser({
                     username: data.username, 
                     _id: data._id,
-                    profile: data.profile_pic, 
+                    profile: data.profile_pic,
                     post: []
                 });
             navigate('/home');

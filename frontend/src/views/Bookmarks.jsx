@@ -5,7 +5,9 @@ import { ConvertDate } from "../scripts/TimeConverter"
 
 export default function Bookmarks() {
     
-    const { user } = useContext(UserContext)
+    const { user, userData } = useContext(UserContext)
+
+    console.log(userData);
 
     return (
         <>

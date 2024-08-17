@@ -82,14 +82,21 @@ export async function useWhoToFollow(){
     }
 }
 
-export async function useFetchUser(username){
+export async function useFetchUser(){
+
+    const _id = localStorage.getItem("_id");
 
     try{
-        const data = await axios.get(`/api/user/${username}`);
+        const data = await axios.get(`/api/user/${_id}`,{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
         
         return data;
         
     }catch(err){
+        console.log(err.response.data.error);
         throw new Error(err.response.data.error);
     }
 }

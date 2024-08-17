@@ -10,9 +10,10 @@ router.post('/createAccount', RegisterUser);
 
 router.patch('/followUser', auth, FollowAUser);
 
+router.get('/WhoToFollow', auth, FetchWhoToFollow);
+
 router.delete('/unfollowUser/:id', auth, UnFollowAUser);
 
-router.get('/WhoToFollow', auth, FetchWhoToFollow);
-router.get('/:username', FetchUser)
+router.get('/:id', auth, FetchUser)
 
 export { router as userRouter };
