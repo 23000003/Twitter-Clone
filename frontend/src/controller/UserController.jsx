@@ -133,3 +133,38 @@ export async function useUnfollowUser(_id){
         throw new Error(err.response.data.error);
     }
 }
+
+
+export async function addToBookmarks(_id){
+
+    try{
+
+        const data = await axios.patch(`/api/user/addToBookmarks`, { _id }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+
+        return data;
+
+    }catch(err){
+        throw new Error(err.response.data.error);
+    }
+}
+
+export async function removeFromBookmarks(_id){
+
+    try{
+
+        const data = await axios.delete(`/api/user/removeFromBookmarks/${_id}`, {
+            headers : {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+
+        return data;
+    }catch(err){
+        throw new Error(err.response.data.error);
+    }
+
+}

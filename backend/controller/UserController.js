@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Post from "../models/Post.js";
 
 
 const createToken = (_id) => {
@@ -183,7 +184,76 @@ const UnFollowAUser = async(req, res) =>{
 
 }
 
+const AddToUserBookmarks = async (req, res) =>{
+  
+  const { _id } = req.body;
+
+  try{
+
+    const user = await User.findById(req.user._id);
+
+    if(!user){
+      return res.status(404).json({message: "User not Found"});
+    }
+
+    user.bookmarks.push(_id);
+
+    await user.save();
+
+    const sendUser = await User.findById(req.user._id)
+      .populate({
+        path: 'bookmarks',
+        populate: {
+          path: 'author',
+          select: 'username profile_pic bio'
+        }
+      });
+
+    return res.status(200).json({data: sendUser, message: "Added to bookmarks"})
+
+  }catch(err){
+    return res.status(500).json({error: err.message});
+  }
+
+}
+
+const RemoveFromUserBookmarks = async (req, res) =>{
+
+  const { id } = req.params;
+
+  try{
+
+    const user = await User.findById(req.user._id); //ur account
+
+    if(!user){
+      return res.status(404).json({message: "User not Found"});
+    }
+
+    user.bookmarks = user.bookmarks.filter(bookmarkid => bookmarkid.toString() !== id);
+
+    await user.save();
+
+    const sendUser = await User.findById(req.user._id)
+      .populate({
+        path: 'bookmarks',
+        populate: {
+          path: 'author',
+          select: 'username profile_pic bio'
+        }
+      });
+
+    return res.status(200).json({data: sendUser, message: "Removed from bookmarks"});
+
+  }catch(err){
+
+    return res.status(500).json({error: err.message});
+  
+  }
+
+}
+
 export {
   LoginUser, RegisterUser, FetchWhoToFollow, 
-  FetchUser, FollowAUser, UnFollowAUser
+  FetchUser, FollowAUser, UnFollowAUser,
+  AddToUserBookmarks, RemoveFromUserBookmarks
 }

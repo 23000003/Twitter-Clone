@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { useFetchUser } from "../controller/UserController";
 
 export const UserContext = createContext();
@@ -34,8 +34,9 @@ const UserProvider = ({ children }) => {
 
   console.log(user);
 
+
   return (
-    <UserContext.Provider value={{ user, setUser, userData, userDataLoading }}>
+    <UserContext.Provider value={{ user, setUser, userData, userDataLoading, setUserData }}>
       {children}
     </UserContext.Provider>
   );

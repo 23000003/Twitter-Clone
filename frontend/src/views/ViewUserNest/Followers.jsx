@@ -2,15 +2,25 @@ import { useContext, useEffect } from "react"
 import { ProfileContext } from "../../contexts/ProfileContext"
 import { useNavigate, useParams } from "react-router-dom";
 import ViewUserHook from "./hook/ViewUserHook";
-
+import { UserContext } from "../../contexts/UserContext";
+import UnFollowFollowHook from "./hook/UnFollowFollowHook";
 
 export default function Followers() {
 
     const { viewUser, loading} = useContext(ProfileContext)
+    const { userData } = useContext(UserContext);
     const { username } = useParams();
     const navigate = useNavigate();
     const ViewUserData = ViewUserHook();
 
+    const {
+        FollowUser,
+        UnfollowUser,
+        setHoverIndex,
+        hoverIndex,
+        isFollowed
+    } = UnFollowFollowHook();
+    
     useEffect(() =>{
         ViewUserData();
     },[username]);
@@ -22,6 +32,8 @@ export default function Followers() {
         window.scrollTo({ top: 0 });
     },[]);
 
+    console.log(isFollowed, "ISFOLLOWED")
+    
     return (
         <>
         <div className="custom-width bg-white notif-height fixed border opacity-95 z-10">
@@ -57,31 +69,55 @@ export default function Followers() {
                                 <img src={user.profile_pic} className="w-9 rounded-2xl" alt={user.username} />
                                 <div className="flex flex-col ml-2">
                                     <span className="font-twitterChirp font-bold">{user.username}</span>
-                                    <span className=" text-gray-400">@{user.username} <span className="text-xs bg-gray-200 px-1 rounded-md text-gray-500">Follows You</span></span>
+                                    <span className=" text-gray-400">@{user.username} {userData.followers.some(followers => followers._id === user._id) && (<span className="text-xs bg-gray-200 px-1 rounded-md text-gray-500">Follows You</span>)}</span>
                                     <span className="text-gray-600">{user.bio}</span>
                                 </div>
                             </div>
-                            <div className="flex flex-row items-center">
-                                {viewUser.following.some(following => following._id === user._id) ? (
-                                    <button className=" text-black border h-9 w-24 rounded-3xl font-medium hover:bg-gray-700 mr-3">
-                                        Following
-                                    </button>
-                                ) : (
-                                    <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700 mr-3">
-                                        Follow
-                                    </button>
-                                )}
-                                <div className="cursor-pointer hover:bg-gray-200" onClick={(e) => {e.stopPropagation(); setShowEdit(post._id)}}>
-                                    <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 mr-3">
-                                        <g>
-                                            <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 
-                                                .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z">
-                                            </path>
-                                        </g>
-                                    </svg>
-                                    {/* {showEditDetails === post._id && (<ShowEditButton _id = {post._id} />)} */}
+                            {userData.username !== user.username && (
+                                <div className="flex flex-row items-center">
+                                    {userData.following.some(following => following._id === user._id) ? (
+                                        !isFollowed.includes(user._id) ? (
+                                            <button
+                                                className={`text-black border h-9 w-24 rounded-3xl font-medium mr-3 ${hoverIndex === index ? 'border-red-600 text-red-600' : 'bg-white'}`}
+                                                onMouseEnter={() => setHoverIndex(index)}
+                                                onMouseLeave={() => setHoverIndex(null)}
+                                                onClick={(e) => { e.stopPropagation(); UnfollowUser(user._id) }}
+                                            > 
+                                                {hoverIndex === index ? 'Unfollow' : 'Following'}
+                                            </button>
+                                        ) : (
+                                            <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700 mr-5" onClick={(e) => {e.stopPropagation(); FollowUser(user._id)}}>
+                                                Follow
+                                            </button>
+                                        )
+                                    ) : (
+                                        isFollowed.includes(user._id) ? (
+                                            <button
+                                                className={`text-black border h-9 w-24 rounded-3xl font-medium mr-3 ${hoverIndex === index ? 'border-red-600 text-red-600' : 'bg-white'}`}
+                                                onMouseEnter={() => setHoverIndex(index)}
+                                                onMouseLeave={() => setHoverIndex(null)}
+                                                onClick={(e) => { e.stopPropagation(); UnfollowUser(user._id) }}
+                                            >
+                                                {hoverIndex === index ? 'Unfollow' : 'Following'}
+                                            </button>
+                                        ) : (
+                                            <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700 mr-5" onClick={(e) => {e.stopPropagation(); FollowUser(user._id)}}>
+                                                Follow
+                                            </button>
+                                        )
+                                    )}
+                                    <div className="cursor-pointer hover:bg-gray-200" onClick={(e) => {e.stopPropagation(); setShowEdit(post._id)}}>
+                                        <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 mr-3">
+                                            <g>
+                                                <path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 
+                                                    .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                        {/* {showEditDetails === post._id && (<ShowEditButton _id = {post._id} />)} */}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     ))
                 ) : (
