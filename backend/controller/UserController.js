@@ -115,7 +115,11 @@ const FetchUser = async(req, res) =>{
       select: 'username profile_pic bio'
     })
     .populate({
-      path: 'bookmarks'
+      path: 'bookmarks',
+      populate: {
+        path: 'author',
+        select: 'username profile_pic bio'
+      }
     })
 
     if(!data){

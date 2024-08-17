@@ -13,14 +13,16 @@ const UserProvider = ({ children }) => {
   });
 
   const [userData, setUserData] = useState([]);
+  const [userDataLoading, setDataLoading] = useState(true);
 
   useEffect(() =>{
-
+    setDataLoading(true);
     if(user.username){
       const FetchUserData = async() =>{
         try{
           const data = await useFetchUser();
           setUserData(data.data.data);
+          setDataLoading(false);
         }catch(err){
           console.log(err.message);
         }
@@ -33,7 +35,7 @@ const UserProvider = ({ children }) => {
   console.log(user);
 
   return (
-    <UserContext.Provider value={{ user, setUser, userData }}>
+    <UserContext.Provider value={{ user, setUser, userData, userDataLoading }}>
       {children}
     </UserContext.Provider>
   );
