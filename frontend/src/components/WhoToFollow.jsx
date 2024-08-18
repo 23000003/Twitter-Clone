@@ -117,12 +117,12 @@ export default function WhoToFollow() {
                                             className={`text-black border h-9 w-24 rounded-3xl font-medium mr-3 ${hoverIndex === index ? 'border-red-600 text-red-600' : 'bg-white'}`}
                                             onMouseEnter={() => setHoverIndex(index)}
                                             onMouseLeave={() => setHoverIndex(null)}
-                                            onClick={(e) => { e.stopPropagation(); UnfollowUser(user._id) }}
+                                            onClick={(e) => { e.stopPropagation(); UnfollowUser(user._id, "isFollowed") }}
                                         >
                                             {hoverIndex === index ? 'Unfollow' : 'Following'}
                                         </button>
                                     ) : (
-                                        <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700" onClick={(e) => { e.stopPropagation(); FollowUser(user._id) }}>
+                                        <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700" onClick={(e) => { e.stopPropagation(); FollowUser(user._id, "isFollowed") }}>
                                             Follow
                                         </button>
                                     )}

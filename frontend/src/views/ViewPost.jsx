@@ -87,7 +87,7 @@ export default function ViewPost(){
                                     <i className="fa-regular fa-heart text-gray-500"></i>
                                     <span className='text-sm ml-2 text-gray-400'>{viewedPost.likes.length}</span>
                                 </span>
-                                <span>
+                                <span className="mr-2">
                                     <i className="fa-regular fa-bookmark text-gray-500 mr-2"></i>
                                 </span>
                             </div>

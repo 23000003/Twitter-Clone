@@ -6,20 +6,38 @@ export default function UnFollowFollowHook() {
     const [hoverIndex, setHoverIndex] = useState(null);
 
     const [isFollowed, setIsFollowed] = useState([]);
+    const [isUnFollowed, setIsUnFollowed] = useState([]);
 
-    const FollowUser = async (_id) => {
+    const FollowUser = async (_id, type) => {
         try {
             const data = await useFollowUser(_id);
-            setIsFollowed(data.data.following);
+            
+            if(type === "isUnFollowed"){
+                setIsUnFollowed((prevIsUnFollowed) => 
+                    prevIsUnFollowed.filter(Unfollowed => Unfollowed !== data.data)
+                );
+            }else if(type === "isFollowed"){
+                setIsFollowed((prevIsFollowed) => [...prevIsFollowed, data.data]);
+            }
+
         } catch (err) {
             console.log(err.message);
         }
     }
 
-    const UnfollowUser = async (_id) => {
+    const UnfollowUser = async (_id, type) => {
         try {
             const data = await useUnfollowUser(_id);
-            setIsFollowed(data.data.following);
+            
+            if(type === "isUnFollowed"){
+                setIsUnFollowed((prevIsUnFollowed) => [...prevIsUnFollowed, data.data]);
+            }else if(type === "isFollowed"){
+                setIsFollowed((prevIsFollowed) => 
+                    prevIsFollowed.filter(followed => followed !== data.data)
+                );
+            }
+
+            console.log(data)
         } catch (err) {
             console.log(err.message);
         }
@@ -30,6 +48,7 @@ export default function UnFollowFollowHook() {
         UnfollowUser,
         setHoverIndex,
         hoverIndex,
-        isFollowed
+        isFollowed,
+        isUnFollowed
     }
 }

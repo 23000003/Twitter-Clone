@@ -18,7 +18,8 @@ export default function Following() {
         UnfollowUser,
         setHoverIndex,
         hoverIndex,
-        isFollowed
+        isFollowed,
+        isUnFollowed
     } = UnFollowFollowHook();
 
     useEffect(() =>{
@@ -32,7 +33,7 @@ export default function Following() {
     },[]);
 
     console.log(isFollowed, "ISFOLLOWED")
-
+    console.log(isUnFollowed, "ISUNFOLLOWED")
     
     return (
         <>
@@ -76,18 +77,19 @@ export default function Following() {
                             {userData.username !== user.username && (
                                 <div className="flex flex-row items-center">
                                     {userData.following.some(following => following._id === user._id) ? (
-                                        !isFollowed.includes(user._id) ? (
+                                        
+                                        isUnFollowed.includes(user._id) ? (
+                                            <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700 mr-5" onClick={(e) => {e.stopPropagation(); FollowUser(user._id, "isUnFollowed")}}>
+                                                Follow
+                                            </button>
+                                        ) : (
                                             <button
                                                 className={`text-black border h-9 w-24 rounded-3xl font-medium mr-3 ${hoverIndex === index ? 'border-red-600 text-red-600' : 'bg-white'}`}
                                                 onMouseEnter={() => setHoverIndex(index)}
                                                 onMouseLeave={() => setHoverIndex(null)}
-                                                onClick={(e) => { e.stopPropagation(); UnfollowUser(user._id) }}
+                                                onClick={(e) => { e.stopPropagation(); UnfollowUser(user._id, "isUnFollowed") }}
                                             > 
                                                 {hoverIndex === index ? 'Unfollow' : 'Following'}
-                                            </button>
-                                        ) : (
-                                            <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700 mr-5" onClick={(e) => {e.stopPropagation(); FollowUser(user._id)}}>
-                                                Follow
                                             </button>
                                         )
                                     ) : (
@@ -96,12 +98,12 @@ export default function Following() {
                                                 className={`text-black border h-9 w-24 rounded-3xl font-medium mr-3 ${hoverIndex === index ? 'border-red-600 text-red-600' : 'bg-white'}`}
                                                 onMouseEnter={() => setHoverIndex(index)}
                                                 onMouseLeave={() => setHoverIndex(null)}
-                                                onClick={(e) => { e.stopPropagation(); UnfollowUser(user._id) }}
+                                                onClick={(e) => { e.stopPropagation(); UnfollowUser(user._id, "isFollowed") }}
                                             >
                                                 {hoverIndex === index ? 'Unfollow' : 'Following'}
                                             </button>
                                         ) : (
-                                            <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700 mr-5" onClick={(e) => {e.stopPropagation(); FollowUser(user._id)}}>
+                                            <button className="bg-black text-white h-9 w-20 rounded-3xl font-medium hover:bg-gray-700 mr-5" onClick={(e) => {e.stopPropagation(); FollowUser(user._id, "isFollowed")}}>
                                                 Follow
                                             </button>
                                         )

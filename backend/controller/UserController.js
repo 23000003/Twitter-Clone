@@ -153,7 +153,8 @@ const FollowAUser = async(req, res) =>{
 
     await UpdateFollowing.save();
 
-    return res.status(200).json({data: UpdateFollowing});
+    return res.status(200).json({data: _id});
+
   }catch(err){
     return res.status(500).json({error: err.message});
   }
@@ -176,7 +177,7 @@ const UnFollowAUser = async(req, res) =>{
 
     await user.save();
 
-    return res.status(200).json({data: user});
+    return res.status(200).json({data: id});
 
   }catch(err){
     return res.status(500).json({error: err.message});

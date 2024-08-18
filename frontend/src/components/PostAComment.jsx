@@ -3,6 +3,7 @@ import guest from "../assets/default.png";
 import { NewPost } from '../controller/PostController';
 import { useCommentPost } from '../controller/CommentController';
 import { useParams } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 
 export default function PostComment({comments, setComments}){
     
@@ -13,6 +14,8 @@ export default function PostComment({comments, setComments}){
     const [newFile, setNewFile] = useState(' '); 
     const textareaRef = useRef(null);
     const { username, postID } = useParams();
+
+    const { user } = useContext(UserContext);
 
     const handleTextareaChange = (e) => {
         autoResizeTextarea(e.target);
@@ -65,11 +68,11 @@ export default function PostComment({comments, setComments}){
 
     return(
         <form className="w-full border-b" onSubmit={createAPost}>
-            {textOnFocus && (<span className='ml-16 pl-2 text-sm flex text-gray-400'>Replying to <p className='ml-1 text-blue-400'>@Kenny</p></span>)}
+            {textOnFocus && (<span className='ml-16 pl-2 text-sm flex text-gray-400'>Replying to <p className='ml-1 text-blue-400'>@{username}</p></span>)}
             <div className="flex flex-col px-5" style={textOnFocus ? {} : { paddingTop: '20px' }}>
                 <div className="flex flex-row items-start">
                     <div className="flex flex-row items-start w-full" >
-                        <img src={guest} className="w-9 rounded-2xl" alt="Guest" />
+                        <img src={user.profile} className="w-9 rounded-2xl" alt="Guest" />
                         <textarea
                             ref={textareaRef}
                             rows={textareaRows}

@@ -7,6 +7,8 @@ export default function CommentsOnPost(props){
     // console.log(comments, "COMMENTS")
     const [comments, setComments] = useState(props.comments);
 
+    console.log(comments)
+
     return(
         <>
         <PostComment setComments = {setComments} comments = {comments}/>
@@ -31,11 +33,11 @@ export default function CommentsOnPost(props){
                                 <div className='mx-4 my-2 flex justify-between'>
                                     <span>
                                         <i className="fa-regular fa-comment text-gray-500"></i>
-                                        <span className='text-sm ml-2 text-gray-400'>2</span>
+                                        <span className='text-sm ml-2 text-gray-400'>0</span>
                                     </span>
                                     <span>
                                         <i className="fa-solid fa-retweet text-gray-500"></i>
-                                        <span className='text-sm ml-2 text-gray-400'>2</span>
+                                        <span className='text-sm ml-2 text-gray-400'>0</span>
                                     </span>
                                     <span className='hover:bg-gray-500'>
                                         <i className="fa-regular fa-heart text-gray-500"></i>
