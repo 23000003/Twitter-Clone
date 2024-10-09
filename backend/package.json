@@ -2,7 +2,7 @@
   "name": "backend",
   "type": "module",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "server": "nodemon server.js"
   },
@@ -11,6 +11,9 @@
   "description": "",
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.5",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.4.0",
     "cors": "^2.8.5",
@@ -22,6 +25,7 @@
     "mongoose": "^8.5.2",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.4",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "typescript": "^5.6.3"
   }
 }
