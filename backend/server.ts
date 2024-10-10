@@ -10,7 +10,7 @@ import { commentRouter } from './routes/CommentRoute.js';
 import { InitSocket } from './config/socketio.js';
 import { SocketListener } from './socket/SocketListener';
 import { Response } from 'express';
-
+import * as dotenv from 'dotenv';
 const app = express();
 
 // Middleware
@@ -18,6 +18,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: false }));
 
+dotenv.config();
 
 // Routes
 app.use("/api/user", userRouter);

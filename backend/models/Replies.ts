@@ -1,6 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document, Types }  from "mongoose";
+import { ReplyType } from "../types/modelTypes";
 
-const ReplySchema = new mongoose.Schema({
+export type ReplyModelType = ReplyType & Document;
+
+const ReplySchema: Schema = new mongoose.Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -21,4 +24,7 @@ const ReplySchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model("Reply", ReplySchema);
+export default mongoose.model<ReplyModelType>(
+    "Reply", 
+    ReplySchema
+);

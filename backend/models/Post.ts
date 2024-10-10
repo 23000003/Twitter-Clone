@@ -1,6 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document, Types }  from "mongoose";
+import { PostType } from "../types/modelTypes";
 
-const PostSchema = new mongoose.Schema({
+export type PostModelType = PostType & Document;
+
+const PostSchema: Schema = new mongoose.Schema({
     author:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -45,4 +48,7 @@ const PostSchema = new mongoose.Schema({
     ]
 });
 
-export default mongoose.model("Post", PostSchema);
+export default mongoose.model<PostModelType>(
+    "Post", 
+    PostSchema
+);

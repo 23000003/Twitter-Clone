@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import Post from "../models/Post.js";
 
 
-const createToken = (_id) => {
+const createToken = (_id: string) => {
   return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "10d" });
 };
 
@@ -38,7 +38,7 @@ const RegisterUser = async (req, res) => {
       background_pic,
     });
 
-    const token = createToken(user._id)
+    const token = createToken(user._id.toString())
 
     res.status(200).json({ username, token });
 
@@ -66,7 +66,7 @@ const LoginUser = async (req, res) => {
     }
   
     try {
-      const token = createToken(user._id)
+      const token = createToken(user._id.toString())
       res.status(200).json({ user, token });
 
     } catch (error) {

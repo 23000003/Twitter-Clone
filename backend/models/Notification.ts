@@ -1,6 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document, Types }  from "mongoose";
+import { NotificationType } from "../types/modelTypes";
 
-const NotificationSchema = new mongoose.Schema({
+export type NotificationModelType = NotificationType & Document;
+
+const NotificationSchema: Schema = new mongoose.Schema({
     notifiedTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -24,4 +27,7 @@ const NotificationSchema = new mongoose.Schema({
     }
 });
 
-export default mongoose.model("Notification", NotificationSchema);
+export default mongoose.model<NotificationModelType>(
+    "Notification", 
+    NotificationSchema
+);
