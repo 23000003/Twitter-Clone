@@ -29,10 +29,9 @@ const UserProvider = ({ children }) => {
       }
       FetchUserData();
     }
-
   },[user]);
 
-  console.log(user);
+  console.log(userData);
 
 
   return (

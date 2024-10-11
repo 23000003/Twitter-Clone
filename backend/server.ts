@@ -1,16 +1,17 @@
 import express from 'express';
 import 'dotenv/config.js';
-import InitializeMongo from './config/mongoDB.js';
-import { userRouter } from './routes/UserRoute.js';
-import { postRouter } from './routes/PostRoute.js';
+import InitializeMongo from './config/mongoDB';
+import { userRouter } from './routes/User.route';
+import { postRouter } from './routes/Post.route';
 import cors from 'cors';
 import http from 'http';
-import SeedFakeData from './faker/seed.js';
-import { commentRouter } from './routes/CommentRoute.js';
-import { InitSocket } from './config/socketio.js';
+// import SeedFakeData from './faker/seed.js';
+import { commentRouter } from './routes/Comment.route';
+import { InitSocket } from './config/socketio';
 import { SocketListener } from './socket/SocketListener';
 import { Response } from 'express';
 import * as dotenv from 'dotenv';
+
 const app = express();
 
 // Middleware
@@ -29,12 +30,12 @@ app.use("/api/comment", commentRouter);
 
 const server = http.createServer(app);
 
+export const io = InitSocket(server);
+
 (async () => {
     const dbIdentify = await InitializeMongo();
 
     if (dbIdentify) {
-
-        const io = InitSocket(server);
 
         SocketListener(io);
 

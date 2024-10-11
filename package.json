@@ -1,0 +1,11 @@
+{
+  "name": "twitterclone---mern-stack",
+  "version": "1.0.0",
+  "description": "An Odin Book Social Media Project using the Features(Limited) and Design of Twitter/X with **M.E.R.N. Stack** through **RESTful API**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

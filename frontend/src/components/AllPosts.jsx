@@ -34,6 +34,7 @@ export default function AllPosts(){
         await TriggerRemoveBookmark(_id, setUserData, setMessageAlert);
     };
 
+    console.log(userData)
 
     return(
         <>

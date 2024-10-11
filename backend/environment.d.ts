@@ -1,3 +1,5 @@
+import { UserType } from "./types/modelTypes";
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -9,6 +11,11 @@ declare global {
       CLOUD_SECRET: string,
       CLOUD_NAME: string,
       PRODUCTION_URL: string,
+    }
+  }
+  namespace Express {
+    interface Request {
+        user: UserType | null;
     }
   }
 }

@@ -1,14 +1,16 @@
 import Post from "../models/Post.js";
-import cloudinary from '../config/cloudinary.js'
+import cloudinary from "../config/cloudinary";
 import User from "../models/User.js";
-import { io } from '../config/socketio.js'
+import { Request, Response } from "express";
+import { io } from "../server.js";
 
-const CreateNewPost = async (req, res) =>{
+const CreateNewPost = async (req: Request, res: Response) =>{
     
     const {content, file} = req.body;
 
     if(!content){
-        return res.status(500).json({error: "Content Field Required"})
+        res.status(500).json({error: "Content Field Required"})
+        return;
     }
 
     try{
@@ -24,7 +26,7 @@ const CreateNewPost = async (req, res) =>{
         const newPost = await Post.create({
             content: content,
             content_image: result,
-            author: req.user._id,
+            author: req.user?._id,
             date_created: new Date(),
         });
 
@@ -35,16 +37,16 @@ const CreateNewPost = async (req, res) =>{
             })
         
         
-        return res.status(200).json({success: true, data: posts})
+        res.status(200).json({success: true, data: posts})
     }
     catch(err){
-        console.log(err)
-        res.status(500).json({error: err.message})
+        console.log(err);
+        res.status(500).json({error: (err as Error).message})
     }
 
 }
 
-const FetchAllPost = async (req, res) =>{
+const FetchAllPost = async (req: Request, res: Response) =>{
 
     try{
         const posts = await Post.find()
@@ -63,15 +65,16 @@ const FetchAllPost = async (req, res) =>{
                 }
             })
 
-        return res.status(200).json({posts});
-
+        res.status(200).json({posts});
+        return;
     }catch(err){
-        return res.status(500).json({error: err.message})
+        res.status(500).json({error: (err as Error).message})
+        return;
     }
     
 }
 
-const FetchViewedPost = async (req, res) =>{
+const FetchViewedPost = async (req: Request, res: Response) =>{
 
     try{
 
@@ -93,22 +96,21 @@ const FetchViewedPost = async (req, res) =>{
             });
 
         if (!posts) {
-            return res.status(404).json({ message: 'Post not found' });
+            res.status(404).json({ message: 'Post not found' });
+            return;
         }
 
         console.log(posts)
-        return res.status(200).json({posts});
+        res.status(200).json({posts});
         
     }catch(err){
-
-        return res.status(500).json({error: err.message})
-
+        res.status(500).json({error: (err as Error).message})
     }
 
 }
 
 
-const FetchUserPagePost = async(req, res) =>{
+const FetchUserPagePost = async(req: Request, res: Response) =>{
     
     try{
         const username = req.params.username;
@@ -125,7 +127,8 @@ const FetchUserPagePost = async(req, res) =>{
 
 
         if (!user) {
-            return res.status(404).json({ message: "User doesnt Exists" });
+            res.status(404).json({ message: "User doesnt Exists" });
+            return;
         }
 
         const posts = await Post.find({
@@ -144,15 +147,14 @@ const FetchUserPagePost = async(req, res) =>{
             select: '_id username'
         });
 
-        return res.status(200).json({posts, user});
-
+        res.status(200).json({posts, user});
     }catch(err){
-        return res.status(500).json({error: err.message})
+        res.status(500).json({error: (err as Error).message})
     }
 }
 
 
-const FetchUserPostLiked = async(req, res) =>{
+const FetchUserPostLiked = async(req: Request, res: Response) =>{
 
     const username = req.params.username;
 
@@ -162,7 +164,8 @@ const FetchUserPostLiked = async(req, res) =>{
         const user = await User.findOne({username: username});
         
         if (!user) {
-            return res.status(404).json({ message: "User doesnt Exists" });
+            res.status(404).json({ message: "User doesnt Exists" });
+            return;
         }
 
         console.log(user);
@@ -174,16 +177,16 @@ const FetchUserPostLiked = async(req, res) =>{
                 select: '_id username profile_pic'
             })
 
-        return res.status(200).json({data: usersPostLiked});
+        res.status(200).json({data: usersPostLiked});
 
     }catch(err){
-        return res.status(500).json({error: err.message});
+        res.status(500).json({error: (err as Error).message});
     }
 
 }
 
 
-const LikePost = async(req, res) =>{
+const LikePost = async(req: Request, res: Response) =>{
 
     const { _id } = req.body;
 
@@ -191,23 +194,28 @@ const LikePost = async(req, res) =>{
         
         const findPost = await Post.findById(_id);
 
-        const userID = req.user._id;
+        const userID = req.user?._id;
 
-        findPost.likes.push(userID);
+        if(userID === undefined){
+            res.status(404).json({ message: "User Not Found "});
+            return;
+        }
 
-        await findPost.save();
+        findPost?.likes?.push(userID);
+
+        await findPost?.save();
 
         io.emit('postLiked', { data: findPost });
 
-        return res.status(200).json({data: findPost});
+        res.status(200).json({data: findPost});
 
     }catch(err){
-        return res.status(500).json({error: err.message});
+        res.status(500).json({error: (err as Error).message});
     }
 
 }
 
-const UnLikePost = async(req, res) =>{
+const UnLikePost = async(req: Request, res: Response) =>{
 
     const { _id } = req.body;
 
@@ -215,75 +223,100 @@ const UnLikePost = async(req, res) =>{
         
         const findPost = await Post.findById(_id);
 
-        const userID = req.user._id;
+        const userID = req.user?._id;
         
-        findPost.likes = findPost.likes.filter(id => id.toString() !== userID.toString());
+        if(userID === undefined ){
+            res.status(404).json({ message: "User Not Found "});
+            return;
+        }
 
-        await findPost.save();
+        if(findPost === null ){
+            res.status(404).json({ message: "User Doesn't have Liked Posts"});
+            return;
+        }
+
+        findPost.likes = findPost.likes?.filter(id => id.toString() !== userID.toString());
+
+        await findPost?.save();
 
         io.emit('postUnliked', {data: findPost});
 
-        return res.status(200).json({data: findPost});
+        res.status(200).json({data: findPost});
 
     }catch(err){
-        return res.status(500).json({error: err.message});
+        res.status(500).json({error: (err as Error).message});
     }
 
 }
 
-const RepostAPost = async (req, res) =>{
+const RepostAPost = async (req: Request, res: Response) =>{
 
     const { _id } = req.body;
 
     try{
 
-        const userID = req.user._id;
+        const userID = req.user?._id;
 
         const findPost = await Post.findById(_id);
 
-        findPost.reposted_by.push(userID);
+        if(userID === undefined ){
+            res.status(404).json({ message: "User Not Found "});
+            return;
+        }
 
-        await findPost.save();
+        findPost?.reposted_by?.push(userID);
+
+        await findPost?.save();
 
         io.emit('postReposted', { data: findPost });
 
-        return res.status(200).json({data: findPost});
+        res.status(200).json({data: findPost});
     
     }catch(err){
 
-        return res.status(500).json({error: err.message});
+        res.status(500).json({error: (err as Error).message});
     
     }
 
 }
 
-const UndoRepostAPost = async (req, res) =>{
+const UndoRepostAPost = async (req: Request, res: Response) =>{
     
     const { _id } = req.body;
 
     try{
 
-        const userID = req.user._id;
+        const userID = req.user?._id;
 
         const findPost = await Post.findById(_id);
 
-        findPost.reposted_by = findPost.reposted_by.filter(id => id.toString() !== userID.toString());
+        if(userID === undefined ){
+            res.status(404).json({ message: "User Not Found "});
+            return;
+        }
+
+        if(findPost === null ){
+            res.status(404).json({ message: "User Doesn't have Liked Posts"});
+            return;
+        }
+
+        findPost.reposted_by = findPost.reposted_by?.filter(
+            id => id.toString() !== userID.toString()
+        );
 
         await findPost.save();
 
         io.emit('postUndoRepost', { data: findPost });
 
-        return res.status(200).json({data: findPost});
+        res.status(200).json({data: findPost});
 
     }catch(err){
-
-        return res.status(500).json({error: err.message});
-
+        res.status(500).json({error: (err as Error).message});
     }
 
 }
 
-const FetchUserFollowing = async(req, res) =>{
+const FetchUserFollowing = async(req: Request, res: Response) =>{
 
     const { _id } = req.body;
 
@@ -292,13 +325,14 @@ const FetchUserFollowing = async(req, res) =>{
         const user = await User.findById(_id);
 
         if(!user){
-            return res.status(404).json({error: "User not found"});
+            res.status(404).json({error: "User not found"});
+            return;
         }
 
-        const following = user.following.map(follow => follow.toString());
+        const following = user.following?.map(follow => follow.toString());
 
         //include urself :))
-        following.push(user._id.toString());
+        following?.push(user._id.toString());
 
         const filteredPosts = await Post.find({ author: { $in: following } })
         .sort({ date_created: "desc" })
@@ -316,14 +350,14 @@ const FetchUserFollowing = async(req, res) =>{
                 }
             });
 
-        return res.status(200).json({data: filteredPosts});
+        res.status(200).json({data: filteredPosts});
     }catch(err){
-        return res.status(500).json({error: err.message});
+        res.status(500).json({error: (err as Error).message});
     }
 
 }
 
-const DeleteYourPost = async (req, res) =>{
+const DeleteYourPost = async (req: Request, res: Response) =>{
 
     const { id } = req.params;
 
@@ -332,13 +366,14 @@ const DeleteYourPost = async (req, res) =>{
         const findPost = await Post.findByIdAndDelete(id);
 
         if(!findPost){
-            return res.status(404).json({error: "Post Not Found"});
+            res.status(404).json({error: "Post Not Found"});
+            return;
         }
 
         res.status(200).json({success: "Post Deleted Successful"})
 
     }catch(err){
-        return res.status(500).json({error: err.message});
+        res.status(500).json({error: (err as Error).message});
     }
 
 }

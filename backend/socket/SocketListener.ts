@@ -1,5 +1,10 @@
 import { Server } from "socket.io";
 
+/**
+ * 
+ * @param io Refactoring this soon
+ */
+
 export function SocketListener(io : any){
 
     io.on('connection', (socket : any) => {

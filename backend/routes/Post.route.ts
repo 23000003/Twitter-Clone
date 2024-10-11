@@ -11,22 +11,22 @@ import {
     UnLikePost,
     FetchUserFollowing,
     DeleteYourPost
-} from "../controller/PostController.js";
-import auth from "../middleware/authMiddleware.js";
+} from "../controller/Post.controller.js";
+import { authentication } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post('/', auth, CreateNewPost);
+router.post('/', authentication, CreateNewPost);
 router.get('/', FetchAllPost);
 
-router.post('/following', auth, FetchUserFollowing);
+router.post('/following', authentication, FetchUserFollowing);
 
-router.delete('/deletePost/:id', auth, DeleteYourPost);
+router.delete('/deletePost/:id', authentication, DeleteYourPost);
 
-router.patch('/like', auth, LikePost);
-router.patch('/unlike', auth, UnLikePost);
-router.patch('/repost', auth, RepostAPost);
-router.patch('/undoRepost', auth, UndoRepostAPost);
+router.patch('/like', authentication, LikePost);
+router.patch('/unlike', authentication, UnLikePost);
+router.patch('/repost', authentication, RepostAPost);
+router.patch('/undoRepost', authentication, UndoRepostAPost);
 
 router.get('/:username/likes', FetchUserPostLiked);
 router.get('/:username/:postID', FetchViewedPost);
