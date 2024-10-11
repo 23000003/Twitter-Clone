@@ -15,7 +15,7 @@ export default async function InitializeMongo() {
     } catch (error) {
        
         console.error('MongoDB connection error:', error);
-
+        
         return false;
     }
 }
