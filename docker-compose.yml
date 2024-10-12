@@ -10,6 +10,41 @@ services:
     volumes:
       - ./backend:/app
       - /app/node_modules
+    networks:
+      - twitter-clone
     ports:
-      - 4000:4040
-      
+      - 4000:4000
+    depends_on:
+      - mongo
+  
+  mongo:
+    image: mongo:7.0.12
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - twitter-clone
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./frontend/.env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - twitter-clone
+    ports:
+      - 5173:5173
+    command: npm run dev -- --host ## hot reload
+    depends_on:
+      - api
+
+volumes:
+  mongo_data:
+networks:
+  twitter-clone:
+    driver: bridge

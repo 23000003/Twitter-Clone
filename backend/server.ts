@@ -22,6 +22,11 @@ app.use(express.urlencoded({ limit: '10mb', extended: false }));
 dotenv.config();
 
 // Routes
+app.get("/", (_, res: Response) => {
+    res.status(200).json({
+        status: "HEY!!!!!!252Y32",
+    })
+})
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
