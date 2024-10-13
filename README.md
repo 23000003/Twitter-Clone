@@ -2,9 +2,6 @@
 
 An Odin Book Social Media Project using the Features(Limited) and Design of Twitter/X with **M.E.R.N. Stack** through **RESTful API**
 
-## Live
-(ongoing)
-
 ## Features
 ✅ 1. **Like, Post, Retweet, Comment** <br/>
 ✅ 2. **Bookmarks** <br/>
